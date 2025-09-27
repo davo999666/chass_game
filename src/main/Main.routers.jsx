@@ -6,9 +6,9 @@ import TestChess from "./TestChess.jsx";
 const MainRouters = () => {
     return (
         <Suspense fallback={<div>Loading…</div>}>
-            <div className="flex bg-gray-100">
+            <div className="flex justify-center items-center bg-gray-100">
                 <div className="p-4">
-                    <Routes>
+                    <Routes >
                         <Route path="/chass" element={<Chess />} />
                         <Route path="/testchess" element={<TestChess />} />
                     </Routes>

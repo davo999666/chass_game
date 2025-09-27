@@ -1,10 +1,10 @@
 import React from "react";
-import Board from "../components/Board.jsx";
+import TestBoard from "../components/TestBoard.jsx";
 
 const TestChess = () => {
     return (
         <div>
-            <Board/>
+            <TestBoard/>
         </div>
     );
 };

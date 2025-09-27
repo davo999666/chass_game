@@ -12,7 +12,7 @@ const dragSlice = createSlice({
     reducers: {
         startDrag(state, action) {
             state.draggingPiece = action.payload.piece;
-            state.from = action.payload.from;
+            state.from = action.payload.from || null;
             state.x = action.payload.x;
             state.y = action.payload.y;
         },

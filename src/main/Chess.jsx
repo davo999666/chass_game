@@ -6,16 +6,10 @@ import PiecesPool from "../components/PiecesPool.jsx";
 
 
 export default function Chess() {
-    // const turn = useSelector((s) => s.chess.turn);
-    // const dispatch = useDispatch();
     const location = useLocation();
     const [gameState, setGameState] = React.useState(true)
     useEffect(() => {
-        if(location.pathname === "/testchess") {
-            setGameState(false)
-        }else {
-            setGameState(true)
-        }
+    (location.pathname === "/testchess") ? setGameState(false) : setGameState(true);
     }, [location]);
 
     return (

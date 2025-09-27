@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import {useDispatch} from "react-redux";
 import Square from "./Square.jsx";
 import DragLayer from "./DragLayer.jsx";
-import { moveDrag, endDrag } from "../features/dragSlice.js";
-import { selectSquare} from "../features/chessSlice.js";
-import store from "../store/store.js";
+import { moveDrag } from "../features/dragSlice.js";
 
 const Board = () => {
     const dispatch = useDispatch();
@@ -21,29 +19,11 @@ const Board = () => {
         dispatch(moveDrag({ x: e.clientX, y: e.clientY }));
     };
 
-    const handleMouseUp = (e) => {
-        const boardElement = e.currentTarget.getBoundingClientRect();
-
-        // find target square based on mouse position
-        const squareSize = boardElement.width / 8;
-        const toC = Math.floor((e.clientX - boardElement.left) / squareSize);
-        const toR = Math.floor((e.clientY - boardElement.top) / squareSize);
-
-        // current dragged piece info from Redux
-        const drag = store.getState().drag;
-        if (drag.draggingPiece && drag.from) {
-            dispatch(
-                selectSquare({ r: drag.from.r, c: drag.from.c }) // select origin
-            );
-            dispatch(selectSquare({ r: toR, c: toC })); // select destination
-        }
-
-        dispatch(endDrag());
-    };
 
     return (
         <div
             className="
+            board-container
         relative
         grid grid-cols-8 grid-rows-8
         w-[320px] h-[320px]        /* default (mobile) */
@@ -52,13 +32,14 @@ const Board = () => {
         lg:w-[800px] lg:h-[800px]  /* large desktop */
         shadow-2xl rounded-md
       "
+            // onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
+
         >
             {Array.from({ length: 8 }).map((_, r) => (
                 <React.Fragment key={r}>
                     {Array.from({ length: 8 }).map((_, c) => (
-                        <Square key={`${r}-${c}`} r={r} c={c} />
+                        <Square key={`${r}-${c}`} r={r} c={c}/>
                     ))}
                 </React.Fragment>
             ))}

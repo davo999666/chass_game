@@ -9,6 +9,7 @@ const MainRouters = () => {
             <div className="flex justify-center items-center bg-gray-100">
                 <div className="p-4">
                     <Routes >
+                        <Route path="/" element={<Chess />} />
                         <Route path="/chass" element={<Chess />} />
                         <Route path="/testchess" element={<Chess />} />
                     </Routes>

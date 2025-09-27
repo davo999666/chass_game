@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {actions, selectSquare, toggleBoard} from "../features/chessSlice.js";
+import { selectSquare, toggleBoard} from "../features/chessSlice.js";
 import { startDrag } from "../features/dragSlice.js";
 import PieceImage from "./PieceImage.jsx";
 import {useLocation} from "react-router-dom";

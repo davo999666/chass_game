@@ -20,14 +20,11 @@ const chessSlice = createSlice({
     reducers: {
         placePiece(state, action) {
             const { r, c, piece } = action.payload;
-            // Place the new piece directly at the coordinates
             state.board[r][c] = piece;
         },
         toggleBoard(state, action) {
             state.switchBoard = action.payload; // true = normal, false = empty
-            state.board = state.switchBoard
-                ? initialBoard.map((row) => row.slice())
-                : initialEmptyBoard.map((row) => row.slice());
+            state.board = state.switchBoard ? initialBoard : initialEmptyBoard;
         },
         selectSquare(state, action) {
             const { r, c } = action.payload;

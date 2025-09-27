@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialBoard } from "../utils/initialBoard.js";
+import {initialBoard, initialEmptyBoard} from "../utils/initialBoard.js";
 import { WHITE, BLACK, initialCastling } from "../utils/constante.js";
 import { formatMove, toAlgebraic } from "../functions/helpers.js";
 import { applyMove } from "../functions/applyMove.js";
@@ -8,14 +8,27 @@ import { handleSelection } from "../functions/selection.js";
 const chessSlice = createSlice({
     name: "chess",
     initialState: {
+        switchBoard: true,
         board: initialBoard,
         turn: WHITE, // white starts
         selected: null, // { r, c }
         legal: [], // array of [r,c]
         castling: initialCastling,
-        history: [], // stores readable notation
+        history: [],
+        emptyBoard:initialEmptyBoard
     },
     reducers: {
+        placePiece(state, action) {
+            const { r, c, piece } = action.payload;
+            // Place the new piece directly at the coordinates
+            state.board[r][c] = piece;
+        },
+        toggleBoard(state, action) {
+            state.switchBoard = action.payload; // true = normal, false = empty
+            state.board = state.switchBoard
+                ? initialBoard.map((row) => row.slice())
+                : initialEmptyBoard.map((row) => row.slice());
+        },
         selectSquare(state, action) {
             const { r, c } = action.payload;
             const piece = state.board[r][c];
@@ -69,5 +82,5 @@ const chessSlice = createSlice({
     },
 });
 
-export const { actions, reducer } = chessSlice;
+export const { actions, reducer ,toggleBoard,placePiece, selectSquare} = chessSlice.actions;
 export default chessSlice.reducer;

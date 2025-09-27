@@ -1,5 +1,5 @@
 // src/utils/pieceMap.js
-
+export const pieces = ["K", "Q", "R", "B", "N", "P"];
 export const pieceMap = {
     K: "https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg", // white king
     k: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Chess_kdt45.svg", // black king

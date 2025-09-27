@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import Square from "./Square.jsx";
 import DragLayer from "./DragLayer.jsx";
 import { moveDrag, endDrag } from "../features/dragSlice.js";
-import {actions} from "../features/chessSlice.js";
+import { selectSquare} from "../features/chessSlice.js";
 import store from "../store/store.js";
 
 const Board = () => {
@@ -33,9 +33,9 @@ const Board = () => {
         const drag = store.getState().drag;
         if (drag.draggingPiece && drag.from) {
             dispatch(
-                actions.selectSquare({ r: drag.from.r, c: drag.from.c }) // select origin
+                selectSquare({ r: drag.from.r, c: drag.from.c }) // select origin
             );
-            dispatch(actions.selectSquare({ r: toR, c: toC })); // select destination
+            dispatch(selectSquare({ r: toR, c: toC })); // select destination
         }
 
         dispatch(endDrag());

@@ -1,7 +1,7 @@
 import {Route, Routes} from "react-router-dom";
 import Chess from "./Chess.jsx";
 import {Suspense} from "react";
-import TestChess from "./TestChess.jsx";
+
 
 const MainRouters = () => {
     return (
@@ -10,7 +10,7 @@ const MainRouters = () => {
                 <div className="p-4">
                     <Routes >
                         <Route path="/chass" element={<Chess />} />
-                        <Route path="/testchess" element={<TestChess />} />
+                        <Route path="/testchess" element={<Chess />} />
                     </Routes>
                 </div>
             </div>

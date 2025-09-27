@@ -1,15 +1,21 @@
-import React, { useMemo } from "react";
+import React, {useEffect, useMemo} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actions } from "../features/chessSlice.js";
+import {actions, selectSquare, toggleBoard} from "../features/chessSlice.js";
 import { startDrag } from "../features/dragSlice.js";
 import PieceImage from "./PieceImage.jsx";
+import {useLocation} from "react-router-dom";
 
 function Square({ r, c }) {
+    const location = useLocation();
     const dispatch = useDispatch();
     const piece = useSelector((s) => s.chess.board[r][c]);
     const legal = useSelector((s) => s.chess.legal);
     const { from } = useSelector((s) => s.drag);
     const isDraggingHere = from && from.r === r && from.c === c;
+    useEffect(() => {
+        (location.pathname === "/testchess") ? dispatch(toggleBoard(false)) : dispatch(toggleBoard(true));
+
+    }, [location]);
 
     const isLegal = useMemo(
         () => legal.some(([lr, lc]) => lr === r && lc === c),
@@ -24,7 +30,7 @@ function Square({ r, c }) {
 
     const onMouseDown = (e) => {
         if (!piece) return;
-        dispatch(actions.selectSquare({ r, c }));
+        dispatch(selectSquare({ r, c }));
         dispatch(startDrag({piece, from: { r, c }, x: e.clientX, y: e.clientY,}));
     };
 
@@ -41,8 +47,9 @@ function Square({ r, c }) {
         </span>
             )}
             {isLegal && <span className="absolute w-3 h-3 rounded-full bg-black/40" />}
-
-            {piece && !isDraggingHere &&(<PieceImage piece={piece} onMouseDown={onMouseDown} />)}
+            {piece && !isDraggingHere && (
+                <PieceImage piece={piece} onMouseDown={onMouseDown} />
+            )}
         </div>
     );
 }

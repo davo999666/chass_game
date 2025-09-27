@@ -1,4 +1,4 @@
-import {Route, Router, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Chess from "./Chess.jsx";
 import {Suspense} from "react";
 import TestChess from "./TestChess.jsx";

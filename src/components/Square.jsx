@@ -34,9 +34,6 @@ function Square({ r, c }) {
         dispatch(startDrag({ piece, from: { r, c }, x: e.clientX, y: e.clientY }));
     };
 
-    // ✅ Drop handling should be in Board, not Square
-    // Keeping only selection/drag start in Square
-
     return (
         <div className={`relative flex items-center justify-center ${base}`}>
             {c === 0 && (

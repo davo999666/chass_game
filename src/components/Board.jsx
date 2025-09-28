@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Square from "./Square.jsx";
 import DragLayer from "./DragLayer.jsx";
 import { moveDrag } from "../features/dragSlice.js";
-
 import {handleDrop} from "../utils/handleDrop.js";
 
 const Board = () => {

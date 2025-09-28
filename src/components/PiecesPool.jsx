@@ -4,8 +4,8 @@ import PieceImage from "./PieceImage.jsx";
 import { pieces } from "../utils/pieceMap.js";
 import { makeBlack, makeWhite } from "../utils/constante.js";
 import Board from "./Board.jsx";
-import { startDrag, endDrag, moveDrag } from "../features/dragSlice.js";
-import {placePiece, selectSquare} from "../features/chessSlice.js";
+import { startDrag, moveDrag } from "../features/dragSlice.js";
+
 import {handleDrop} from "../utils/handleDrop.js";
 
 function PiecesPoolBoard() {
@@ -47,10 +47,8 @@ function PiecesPoolBoard() {
                     />
                 ))}
             </div>
-
             {/* Board */}
             <Board />
-
             {/* Black pool */}
             <div className="flex flex-col gap-2 bg-gray-200 p-2 rounded shadow" onMouseMove={handleMouseMove}>
                 {pieces.map((p) => (

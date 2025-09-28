@@ -5,7 +5,6 @@ import { placePiece, selectSquare } from "../features/chessSlice.js";
 export const handleDrop = (e, drag, dispatch, boardElement) => {
     if (!boardElement) return;
     const { left, top, right, bottom, width } = boardElement;
-
     // If dropped outside board
     if (
         e.clientX < left ||

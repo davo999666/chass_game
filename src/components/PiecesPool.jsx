@@ -20,6 +20,7 @@ function PiecesPoolBoard() {
     }, []);
 
     const onMouseDownPool = (piece) => (e) => {
+        if (!piece) return;
         dispatch(startDrag({ piece, from: null, x: e.clientX, y: e.clientY }));
     };
 
@@ -28,9 +29,7 @@ function PiecesPoolBoard() {
     };
 
     const handleMouseUp = (e) => {
-        const boardElement = document
-            .querySelector(".board-container")
-            ?.getBoundingClientRect();
+        const boardElement = document.querySelector(".board-container")?.getBoundingClientRect();
         handleDrop(e, drag, dispatch, boardElement);
     };
 

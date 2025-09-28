@@ -47,7 +47,6 @@ const Board = () => {
                     ))}
                 </React.Fragment>
             ))}
-
             {/* floating dragged piece follows cursor */}
             <DragLayer />
         </div>

@@ -23,7 +23,7 @@ const chessSlice = createSlice({
             state.board[r][c] = piece;
         },
         toggleBoard(state, action) {
-            state.switchBoard = action.payload; // true = normal, false = empty
+            state.switchBoard = action.payload;
             state.board = state.switchBoard ? initialBoard : initialEmptyBoard;
         },
         selectSquare(state, action) {
@@ -79,5 +79,5 @@ const chessSlice = createSlice({
     },
 });
 
-export const { actions, reducer ,toggleBoard,placePiece, selectSquare} = chessSlice.actions;
+export const {resetGame, toggleBoard,placePiece, selectSquare} = chessSlice.actions;
 export default chessSlice.reducer;

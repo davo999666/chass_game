@@ -6,6 +6,7 @@ import { makeBlack, makeWhite } from "../utils/constante.js";
 import Board from "./Board.jsx";
 import { startDrag, endDrag, moveDrag } from "../features/dragSlice.js";
 import {placePiece, selectSquare} from "../features/chessSlice.js";
+import {handleDrop} from "../utils/handleDrop.js";
 
 function PiecesPoolBoard() {
     const dispatch = useDispatch();
@@ -30,42 +31,8 @@ function PiecesPoolBoard() {
         const boardElement = document
             .querySelector(".board-container")
             ?.getBoundingClientRect();
-        if (!boardElement) return;
-
-        const { left, top, right, bottom, width } = boardElement;
-
-        // If drop is outside board → ignore
-        if (
-            e.clientX < left ||
-            e.clientX > right ||
-            e.clientY < top ||
-            e.clientY > bottom
-        ) {
-            console.log("Dropped outside → ignore");
-            dispatch(endDrag());
-            return;
-        }
-
-        // Compute row/col inside the board
-        const squareSize = width / 8;
-        const toC = Math.floor((e.clientX - left) / squareSize);
-        const toR = Math.floor((e.clientY - top) / squareSize);
-
-        if (drag.draggingPiece && drag.from) {
-            // 🟢 Case 1: Moving a piece already on the board
-            console.log("Legal move flow");
-            dispatch(selectSquare({ r: drag.from.r, c: drag.from.c })); // origin
-            dispatch(selectSquare({ r: toR, c: toC }));                 // destination
-        } else if (drag.draggingPiece || drag.piece) {
-            // 🔵 Case 2: Dropping from pool directly
-            console.log("Direct place flow");
-            const piece = drag.draggingPiece || drag.piece;
-            dispatch(placePiece({ r: toR, c: toC, piece }));
-        }
-
-        dispatch(endDrag());
+        handleDrop(e, drag, dispatch, boardElement);
     };
-
 
 
     return (

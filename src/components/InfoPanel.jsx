@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actions } from "../features/chessSlice.js";
+import {resetGame} from "../features/chessSlice.js";
 import { WHITE } from "../utils/constante.js";
 
 function InfoPanel() {
@@ -15,7 +15,7 @@ function InfoPanel() {
                 </div>
             </div>
             <button
-                onClick={() => dispatch(actions.resetGame())}
+                onClick={() => dispatch(resetGame())}
                 className="px-4 py-2 rounded-xl shadow bg-indigo-600 text-white hover:opacity-90"
             >
                 Reset

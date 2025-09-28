@@ -2,15 +2,12 @@ import {findKing} from "./findKing.js";
 // constants
 const WHITE = "w";
 const BLACK = "b";
-
-// helpers
-const isWhite = (p) => p && p === p.toUpperCase();
-const isBlack = (p) => p && p === p.toLowerCase();
-const cloneBoard = (b) => b.map((row) => row.slice());
-
-// import other utilities
 import { pseudoMovesForPiece } from "./pseudoMovesForPiece.js";
 import { isSquareAttacked } from "./isSquareAttacked.js";
+import {cloneBoard, isBlack, isWhite} from "../utils/constante.js";
+
+
+
 export function legalMoves(board, fromR, fromC, turn, castling) {
     const piece = board[fromR][fromC];
     if (!piece) return [];
@@ -26,7 +23,9 @@ export function legalMoves(board, fromR, fromC, turn, castling) {
         const b2 = cloneBoard(board);
         b2[toR][toC] = piece;
         b2[fromR][fromC] = null;
-        const [kR, kC] = findKing(b2, color);
+        const kingPos = findKing(b2, color);
+        if (!kingPos) continue;
+        const [kR, kC] = kingPos;
         if (!isSquareAttacked(b2, kR, kC, color === WHITE ? BLACK : WHITE)) {
             res.push([toR, toC]);
         }

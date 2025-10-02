@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 function Square({ r, c }) {
     const location = useLocation();
     const dispatch = useDispatch();
-    const piece = useSelector((s) => s.chess.board[r][c]);
+    const piece = useSelector((s) => s.chess.boardView[r][c]);
     const legal = useSelector((s) => s.chess.legal);
     const { from } = useSelector((s) => s.drag);
     const isDraggingHere = from && from.r === r && from.c === c;

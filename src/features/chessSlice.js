@@ -11,6 +11,7 @@ const chessSlice = createSlice({
     initialState: {
         switchBoard: true,
         board: initialBoard,
+        boardView: initialBoard,
         turn: WHITE, // white starts
         selected: null, // { r, c }
         legal: [], // array of [r,c]

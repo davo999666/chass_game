@@ -48,7 +48,7 @@ function Square({ r, c }) {
             )}
             {isLegal && <span className="absolute w-3 h-3 rounded-full bg-black/40" />}
             {piece && !isDraggingHere && (
-                <PieceImage piece={piece} onMouseDown={onMouseDown} />
+                <PieceImage piece={piece} onMouseDown={onMouseDown}/>
             )}
         </div>
     );

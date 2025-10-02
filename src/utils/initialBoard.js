@@ -18,3 +18,10 @@ export const initialEmptyBoard = [
     [null,null,null,null,null,null,null,null],
     [null,null,null,null,null,null,null,null],
 ];
+export function viewToLogicCoords(r, c, flipped) {
+    if (!flipped) return { r, c };
+    return {
+        r: 7 - r,
+        c: 7 - c,
+    };
+}

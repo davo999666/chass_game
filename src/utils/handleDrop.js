@@ -15,7 +15,6 @@ export const handleDrop = (e, drag, dispatch, boardElement) => {
         dispatch(endDrag());
         return;
     }
-
     // Calculate square
     const squareSize = width / 8;
     const toC = Math.floor((e.clientX - left) / squareSize);

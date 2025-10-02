@@ -9,6 +9,7 @@ const Board = () => {
     const dispatch = useDispatch();
     const drag = useSelector((s) => s.drag);
 
+
     useEffect(() => {
         document.body.style.userSelect = "none";
         return () => {

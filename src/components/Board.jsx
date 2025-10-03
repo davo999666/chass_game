@@ -8,7 +8,7 @@ import {handleDrop} from "../utils/handleDrop.js";
 const Board = () => {
     const dispatch = useDispatch();
     const drag = useSelector((s) => s.drag);
-
+    const flipped = useSelector((s)=>s.chess.flipped)
 
     useEffect(() => {
         document.body.style.userSelect = "none";
@@ -23,7 +23,7 @@ const Board = () => {
 
     const handleMouseUp = (e) => {
         const boardElement = e.currentTarget.getBoundingClientRect();
-        handleDrop(e, drag, dispatch, boardElement);
+        handleDrop(e, drag, dispatch, boardElement, flipped); // 👈 pass flipped
     };
 
     return (

@@ -22,7 +22,7 @@ export default function Chess() {
                 </>
             ) : (
                 <>
-                    <InfoPanel/>
+                    <InfoPanelGame/>
                     <PiecesPool/>
                 </>
             )}

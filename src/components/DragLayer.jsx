@@ -9,6 +9,7 @@ export default function DragLayer() {
     return (
         <img
             src={pieceMap[draggingPiece]}
+            draggable={false}   // ✅ stop ghost image here too
             className="
     fixed pointer-events-none select-none
     w-[40px] h-[40px]
@@ -17,6 +18,7 @@ export default function DragLayer() {
     lg:w-[88px] lg:h-[88px]
   "
             style={{left: x - 36, top: y - 36}}
-         alt="piece"/>
+            alt="piece"
+        />
     );
 }

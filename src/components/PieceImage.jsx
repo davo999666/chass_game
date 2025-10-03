@@ -10,13 +10,14 @@ function PieceImage({ piece, onMouseDown }) {
             src={pieceMap[piece]}
             alt={piece}
             onMouseDown={onMouseDown}
+            draggable={false}   // ✅ stop browser default drag ghost
             className="
-        w-[40px] h-[40px]
-        sm:w-[56px] sm:h-[56px]
-        md:w-[72px] md:h-[72px]
-        lg:w-[88px] lg:h-[88px]
-        select-none cursor-grab active:cursor-grabbing
-      "
+    w-[40px] h-[40px]
+    sm:w-[56px] sm:h-[56px]
+    md:w-[72px] md:h-[72px]
+    lg:w-[88px] lg:h-[88px]
+    select-none cursor-grab active:cursor-grabbing
+  "
         />
     );
 }

@@ -9,6 +9,7 @@ import { startDrag, moveDrag } from "../features/dragSlice.js";
 import {handleDrop} from "../utils/handleDrop.js";
 
 function PiecesPoolBoard() {
+    const flipped = useSelector((s)=> s.chess.flipped);
     const dispatch = useDispatch();
     const drag = useSelector((s) => s.drag);
 
@@ -30,7 +31,7 @@ function PiecesPoolBoard() {
 
     const handleMouseUp = (e) => {
         const boardElement = document.querySelector(".board-container")?.getBoundingClientRect();
-        handleDrop(e, drag, dispatch, boardElement);
+        handleDrop(e, drag, dispatch, boardElement, flipped);
     };
 
 

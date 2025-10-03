@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialBoard, initialEmptyBoard } from "../utils/initialBoard.js";
+import {deepCopyBoard, flipBoardView, initialBoard, initialEmptyBoard} from "../utils/initialBoard.js";
 import { WHITE, BLACK, initialCastling } from "../utils/constante.js";
 import { formatMove, toAlgebraic } from "../functions/helpers.js";
 import { applyMove } from "../functions/applyMove.js";
@@ -10,8 +10,8 @@ const chessSlice = createSlice({
     name: "chess",
     initialState: {
         switchBoard: true,
-        board: initialBoard,
-        boardView: initialBoard,
+        board: deepCopyBoard(initialBoard),
+        boardView: deepCopyBoard(initialBoard),
         turn: WHITE, // white starts
         selected: null, // { r, c }
         legal: [], // array of [r,c]
@@ -22,7 +22,10 @@ const chessSlice = createSlice({
     },
     reducers: {
         flipBoard(state) {
-            state.flipped = !state.flipped;
+            state.flipped = !state.flipped; // ✅ keep flipped flag in sync
+            state.boardView = state.flipped
+                ? flipBoardView(state.board)   // show flipped
+                : deepCopyBoard(state.board);  // show normal
         },
         changeTurn(state) {
             state.turn = state.turn === WHITE ? BLACK : WHITE;
@@ -61,11 +64,14 @@ const chessSlice = createSlice({
         placePiece(state, action) {
             const { r, c, piece } = action.payload;
             state.board[r][c] = piece;
+            state.boardView[r][c] = piece;
         },
 
         toggleBoard(state, action) {
             state.switchBoard = action.payload;
-            state.board = state.switchBoard ? initialBoard : initialEmptyBoard;
+            state.board = state.switchBoard ? deepCopyBoard(initialBoard) : deepCopyBoard(initialEmptyBoard);
+            state.boardView = state.switchBoard ? deepCopyBoard(initialBoard) : deepCopyBoard(state.board);
+
         },
 
         selectSquare(state, action) {
@@ -116,6 +122,11 @@ const chessSlice = createSlice({
                     rookPiece: didCastle ? (pieceFrom === "K" ? "R" : "r") : null,
                 });
                 // Switch turn
+                 if(state.flipped){
+                     state.boardView = flipBoardView(state.board)
+                 } else {
+                     state.boardView = deepCopyBoard(state.board);
+                 }
                 state.turn = state.turn === WHITE ? BLACK : WHITE;
                 state.selected = null;
                 state.legal = [];
@@ -128,7 +139,8 @@ const chessSlice = createSlice({
 
         resetGame() {
             return {
-                board: initialBoard.map((row) => row.slice()),
+                board: deepCopyBoard(initialBoard),
+                boardView: deepCopyBoard(initialBoard),
                 turn: WHITE,
                 selected: null,
                 legal: [],

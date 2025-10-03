@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {flipBoard, moveBack, resetGame} from "../features/chessSlice.js";
+import {changeTurn, flipBoard, moveBack, resetGame} from "../features/chessSlice.js";
 import {WHITE} from "../utils/constante.js";
 
 function InfoPanelGame() {
@@ -8,13 +8,17 @@ function InfoPanelGame() {
     const turn = useSelector((s) => s.chess.turn);
     const history = useSelector((s) => s.chess.history);
     const board = useSelector((s) => s.chess.board);
+    const boardView = useSelector((s) => s.chess.boardView);
 
 
 
     return (
         <div className="flex flex-col gap-2">
             <div className="p-3 rounded-lg shadow bg-white/80">
-                <div className="text-xl">
+                <div
+                    className="text-xl"
+                    onClick={() => {dispatch(changeTurn())}}
+                >
                     {turn === WHITE ? "Turn White" : "Turn Black"}
                 </div>
             </div>
@@ -46,17 +50,25 @@ function InfoPanelGame() {
             <div className="p-3 rounded-lg shadow bg-gray-100 font-mono text-sm">
                 <h3 className="font-bold mb-2">Board</h3>
                 <pre>
-                {board.map((row, i) =>
-                    (8 - i) + " " + row.map(cell => cell || ".").join(" ") + " " + (8 - i)).join("\n")}
+                {board.map((row) =>
+                    row.map(cell => cell || ".").join(" ") + " ").join("\n")}
                </pre>
-                <div> a b c d e f g h</div>
+
             </div>
             <button
-                onClick={()=>dispatch(flipBoard())}
+                onClick={() => dispatch(flipBoard())}
                 className="px-4 py-2 rounded-xl shadow bg-gray-600 text-white hover:opacity-90"
             >
                 flip bord
             </button>
+            <div className="p-3 rounded-lg shadow bg-gray-100 font-mono text-sm">
+                <h3 className="font-bold mb-2">Board</h3>
+                <pre>
+                {boardView.map((row) =>
+                    row.map(cell => cell || ".").join(" ") + " ").join("\n")}
+               </pre>
+
+            </div>
         </div>
     );
 }

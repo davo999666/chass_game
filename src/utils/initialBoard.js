@@ -25,3 +25,18 @@ export function viewToLogicCoords(r, c, flipped) {
         c: 7 - c,
     };
 }
+export const deepCopyBoard = (board) => board.map(row => [...row]);
+export const flipBoardView = (board) => {
+    return board
+        .map(row => [...row])   // copy each row
+        .reverse()              // flip vertically
+        .map(row => row.reverse()); // flip horizontally
+};
+// utils/boardUtils.js
+export function mapCoords(r, c, boardSize, flipped) {
+    if (!flipped) return { r, c };
+    return {
+        r: boardSize - 1 - r,
+        c: boardSize - 1 - c
+    };
+}

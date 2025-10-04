@@ -7,14 +7,13 @@ import { makeBlack, makeWhite } from "../utils/constante.js";
 import Board from "./Board.jsx";
 import { startDrag, moveDrag } from "../features/dragSlice.js";
 import { handleDrop } from "../utils/handleDrop.js";
-import EmptySquare from "./EmptySquare.jsx";
-import { useLocation } from "react-router-dom";
+
 
 function PiecesPoolBoard() {
     const flipped = useSelector((s) => s.chess.flipped);
     const drag = useSelector((s) => s.drag);
     const dispatch = useDispatch();
-    const location = useLocation();
+
 
     useEffect(() => {
         document.body.style.userSelect = "none";

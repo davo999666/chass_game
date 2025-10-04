@@ -81,7 +81,7 @@ function EmptySquare() {
 
     return (
         <div
-            className="flex gap-6 items-center border-4"
+            className="flex  flex-col md:flex-row items-center md:items-start gap-4"
             style={{ touchAction: "none" }}
             onTouchMove={makeMove(dispatch, moveDrag)}
         >
@@ -131,7 +131,7 @@ function EmptySquare() {
                 </div>
 
                 <div
-                    className={`relative grid grid-cols-8 grid-rows-8 ${boardSize} border-4`}
+                    className={`relative grid grid-cols-8 grid-rows-8 ${boardSize}`}
                     style={{ touchAction: "none" }}
                     onMouseMove={makeMove(dispatch, moveDrag)}
                     onMouseUp={makeBoardEnd(handleBoardMouseUp)}

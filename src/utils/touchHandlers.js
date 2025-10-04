@@ -1,11 +1,3 @@
-// ----------------------
-// Helpers
-// ----------------------
-
-// Get coordinates for mouse OR touch events
-import {mapCoords} from "./initialBoard.js";
-import {endDrag} from "../features/dragSlice.js";
-import {dropPiece} from "../features/chessSliceEmpty.js";
 
 export function getEventPoint(e) {
     if (e.touches && e.touches.length > 0) {

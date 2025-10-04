@@ -1,17 +1,20 @@
+// src/components/PiecesPoolBoard.jsx
 import React, { useEffect } from "react";
-import {useDispatch, useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PieceImage from "./PieceImage.jsx";
 import { pieces } from "../utils/pieceMap.js";
 import { makeBlack, makeWhite } from "../utils/constante.js";
 import Board from "./Board.jsx";
 import { startDrag, moveDrag } from "../features/dragSlice.js";
-
-import {handleDrop} from "../utils/handleDrop.js";
+import { handleDrop } from "../utils/handleDrop.js";
+import EmptySquare from "./EmptySquare.jsx";
+import { useLocation } from "react-router-dom";
 
 function PiecesPoolBoard() {
-    const flipped = useSelector((s)=> s.chess.flipped);
-    const dispatch = useDispatch();
+    const flipped = useSelector((s) => s.chess.flipped);
     const drag = useSelector((s) => s.drag);
+    const dispatch = useDispatch();
+    const location = useLocation();
 
     useEffect(() => {
         document.body.style.userSelect = "none";
@@ -30,15 +33,30 @@ function PiecesPoolBoard() {
     };
 
     const handleMouseUp = (e) => {
-        const boardElement = document.querySelector(".board-container")?.getBoundingClientRect();
-        handleDrop(e, drag, dispatch, boardElement, flipped);
+        const boardElement = document
+            .querySelector(".board-container")
+            ?.getBoundingClientRect();
+        handleDrop(
+            e,
+            drag,
+            dispatch,
+            boardElement,
+            flipped
+        );
     };
 
 
     return (
-        <div className="flex gap-6 items-center" onMouseUp={handleMouseUp} >
+        <div className="flex gap-6 items-center" onMouseUp={handleMouseUp}>
+
+
+            {/* Board */}
+            <Board/>
             {/* White pool */}
-            <div className="flex flex-col gap-2 bg-gray-100 p-2 rounded shadow" onMouseMove={handleMouseMove}   >
+            <div
+                className="flex flex-col gap-2 bg-gray-100 p-2 rounded shadow"
+                onMouseMove={handleMouseMove}
+            >
                 {pieces.map((p) => (
                     <PieceImage
                         key={makeWhite(p)}
@@ -47,10 +65,12 @@ function PiecesPoolBoard() {
                     />
                 ))}
             </div>
-            {/* Board */}
-            <Board />
             {/* Black pool */}
-            <div className="flex flex-col gap-2 bg-gray-200 p-2 rounded shadow" onMouseMove={handleMouseMove}>
+
+            <div
+                className="flex flex-col gap-2 bg-gray-200 p-2 rounded shadow"
+                onMouseMove={handleMouseMove}
+            >
                 {pieces.map((p) => (
                     <PieceImage
                         key={makeBlack(p)}

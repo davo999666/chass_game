@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {changeTurn, moveBack, toggleBoard} from "../features/chessSlice.js";
+import {changeTurn, flipBoard, moveBack, toggleBoard} from "../features/chessSlice.js";
 import { WHITE } from "../utils/constante.js";
 
 function InfoPanel() {
@@ -13,7 +13,9 @@ function InfoPanel() {
             <div className="p-3 rounded-lg shadow bg-white/80">
                 <button
                     className="text-xl"
-                    onClick={() => {dispatch(changeTurn())}}
+                    onClick={() => {
+                        dispatch(changeTurn())
+                    }}
                 >
                     {turn === WHITE ? "Turn White" : "Turn Black"}
                 </button>
@@ -40,6 +42,12 @@ function InfoPanel() {
                 className="px-4 py-2 rounded-xl shadow bg-gray-600 text-white hover:opacity-90"
             >
                 Move Back
+            </button>
+            <button
+                onClick={() => dispatch(flipBoard())}
+                className="px-4 py-2 rounded-xl shadow bg-gray-600 text-white hover:opacity-90"
+            >
+                flip bord
             </button>
         </div>
     );

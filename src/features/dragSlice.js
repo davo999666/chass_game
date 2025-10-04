@@ -10,6 +10,7 @@ const dragSlice = createSlice({
         y: 0,
     },
     reducers: {
+
         startDrag(state, action) {
             state.draggingPiece = action.payload.piece;
             state.from = action.payload.from || null;

@@ -1,14 +1,23 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Square from "./Square.jsx";
 import DragLayer from "./DragLayer.jsx";
 import { moveDrag } from "../features/dragSlice.js";
 import {handleDrop} from "../utils/handleDrop.js";
+import {useLocation} from "react-router-dom";
+import {toggleBoard} from "../features/chessSlice.js";
 
 const Board = () => {
+    const location = useLocation();
     const dispatch = useDispatch();
     const drag = useSelector((s) => s.drag);
     const flipped = useSelector((s)=>s.chess.flipped)
+
+    useEffect(() => {
+        const enableRules =
+            location.pathname !== "/testchess";
+        dispatch(toggleBoard(enableRules));
+    }, [location, dispatch]);
 
     useEffect(() => {
         document.body.style.userSelect = "none";
@@ -43,9 +52,9 @@ const Board = () => {
         >
             {Array.from({ length: 8 }).map((_, r) => (
                 <React.Fragment key={r}>
-                    {Array.from({ length: 8 }).map((_, c) => (
-                        <Square key={`${r}-${c}`} r={r} c={c} />
-                    ))}
+                    {Array.from({ length: 8 }).map((_, c) =>
+                                <Square key={`${r}-${c}`} r={r} c={c} />
+                    )}
                 </React.Fragment>
             ))}
             {/* floating dragged piece follows cursor */}

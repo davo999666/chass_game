@@ -1,6 +1,7 @@
 import {Route, Routes} from "react-router-dom";
 import Chess from "./Chess.jsx";
 import {Suspense} from "react";
+import EmptySquare from "../components/EmptySquare.jsx";
 
 
 const MainRouters = () => {
@@ -12,6 +13,7 @@ const MainRouters = () => {
                         <Route path="/" element={<Chess />} />
                         <Route path="/chass" element={<Chess />} />
                         <Route path="/testchess" element={<Chess />} />
+                        <Route path="/emptychess" element={<EmptySquare/>} />
                     </Routes>
                 </div>
             </div>

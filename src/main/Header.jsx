@@ -25,6 +25,16 @@ export default function Header() {
                 >
                     Empty Board
                 </NavLink>
+                <NavLink
+                    to="/emptychess"
+                    className={({ isActive }) =>
+                        `px-4 py-2 rounded-xl text-sm md:text-base transition hover:opacity-90 ${
+                            isActive ? "bg-black text-white shadow-md" : "bg-blue-200 text-gray-800"
+                        }`
+                    }
+                >
+                    Empty Board without legal
+                </NavLink>
             </nav>
         </header>
     );

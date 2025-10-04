@@ -1,13 +1,12 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSquare, toggleBoard } from "../features/chessSlice.js";
+import { selectSquare } from "../features/chessSlice.js";
 import { startDrag } from "../features/dragSlice.js";
 import PieceImage from "./PieceImage.jsx";
-import { useLocation } from "react-router-dom";
+
 import {mapCoords} from "../utils/initialBoard.js";
 
 function Square({ r, c }) {
-    const location = useLocation();
     const dispatch = useDispatch();
     const piece = useSelector((s) => s.chess.boardView[r][c]);
     const legal = useSelector((s) => s.chess.legal);
@@ -16,9 +15,7 @@ function Square({ r, c }) {
     const board = useSelector((s)=> s.chess.boardView)
     const flipped = useSelector((s)=> s.chess.flipped);
 
-    useEffect(() => {
-        dispatch(toggleBoard(location.pathname !== "/testchess"));
-    }, [location, dispatch]);
+
 
     const logicCoords = mapCoords(r, c, board.length, flipped);
 
@@ -35,7 +32,6 @@ function Square({ r, c }) {
 
     const onMouseDown = (e) => {
         if (!piece) return;
-        // adjust coords based on flip state
         const { r: logicR, c: logicC } = mapCoords(r, c, board.length, flipped);
         dispatch(selectSquare({ r: logicR, c: logicC }));
         dispatch(startDrag({ piece, from: { r: logicR, c: logicC }, x: e.clientX, y: e.clientY }));

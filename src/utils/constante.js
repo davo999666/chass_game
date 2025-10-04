@@ -10,3 +10,9 @@ export const cloneBoard = (b) => b.map((row) => row.slice());
 
 // Castling rights: KQkq (white: king/queen side, black: king/queen side)
 export const initialCastling = { K: true, Q: true, k: true, q: true };
+export function isSameColor(a, b) {
+    if (!a || !b) return false;
+    const whiteA = a === a.toUpperCase();
+    const whiteB = b === b.toUpperCase();
+    return whiteA === whiteB;
+}

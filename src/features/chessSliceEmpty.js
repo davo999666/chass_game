@@ -14,11 +14,9 @@ const chessSliceEmpty = createSlice({
     name: "chessEmpty",
     initialState,
     reducers: {
-        removePiece(state, action) {
-            const { r, c } = action.payload;
-            state.board[r][c] = null; // clear the square
+        flipBoard(state) {
+            state.flipped = !state.flipped;
         },
-
         dropPiece: (state, action) => {
             const { drag, to, target } = action.payload;
             const moving = drag.draggingPiece;
@@ -86,5 +84,5 @@ const chessSliceEmpty = createSlice({
     },
 });
 
-export const { removePiece, dropPiece, reset, moveBack } = chessSliceEmpty.actions;
+export const { flipBoard, dropPiece, reset, moveBack } = chessSliceEmpty.actions;
 export default chessSliceEmpty.reducer;

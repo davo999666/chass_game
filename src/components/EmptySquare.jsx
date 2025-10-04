@@ -26,11 +26,10 @@ function EmptySquare() {
     const onMouseDown = (piece, r, c) => (e) => {
         if (!piece) return;
         const { r: logicR, c: logicC } = mapCoords(r, c, board.length, flipped);
-        // start dragging
         dispatch(
             startDrag({
                 piece,
-                from: { r: logicR, c: logicC }, // 👈 save origin square
+                from: { r: logicR, c: logicC },
                 x: e.clientX,
                 y: e.clientY,
             })
@@ -42,7 +41,7 @@ function EmptySquare() {
         dispatch(
             startDrag({
                 piece,
-                from: null, // 👈 from pool
+                from: null,
                 x: e.clientX,
                 y: e.clientY,
             })
@@ -52,10 +51,13 @@ function EmptySquare() {
     const handlePoolMouseUp = (e, color) => {
         if (!drag.draggingPiece) return;
         dispatch(
-            dropPiece({clientX: e.clientX, clientY: e.clientY, drag: { draggingPiece: drag.draggingPiece, from: drag.from },
+            dropPiece({
+                clientX: e.clientX,
+                clientY: e.clientY,
+                drag: { draggingPiece: drag.draggingPiece, from: drag.from },
                 flipped,
-                target: "pool", // 👈 mark pool drop
-                poolColor: color, // "white" or "black"
+                target: "pool",
+                poolColor: color,
             })
         );
         dispatch(endDrag());
@@ -69,7 +71,6 @@ function EmptySquare() {
         const relY = e.clientY - rect.top;
         const r = Math.floor(relY / size);
         const c = Math.floor(relX / size);
-        // ignore if outside board
         if (r < 0 || r > 7 || c < 0 || c > 7) {
             dispatch(endDrag());
             return;
@@ -79,24 +80,18 @@ function EmptySquare() {
             dropPiece({
                 clientX: e.clientX,
                 clientY: e.clientY,
-                board: {
-                    width: rect.width,
-                    left: rect.left,
-                    top: rect.top,
-                },
-                drag: {
-                    draggingPiece: drag.draggingPiece,
-                    from: drag.from, // still original logic square
-                },
+                board: { width: rect.width, left: rect.left, top: rect.top },
+                drag: { draggingPiece: drag.draggingPiece, from: drag.from },
                 flipped,
                 target: "board",
-                to: { r: logicR, c: logicC }, // 👈 use converted coords
+                to: { r: logicR, c: logicC },
             })
         );
         dispatch(endDrag());
     };
 
-
+    const letters = flipped ? ["h","g","f","e","d","c","b","a"] : ["a","b","c","d","e","f","g","h"];
+    const numbers = flipped ? ["1","2","3","4","5","6","7","8"] : ["8","7","6","5","4","3","2","1"];
 
     return (
         <div className="flex gap-6 items-center">
@@ -109,13 +104,19 @@ function EmptySquare() {
                     Reset
                 </button>
 
+                <button
+                    onClick={() => dispatch({ type: "chessEmpty/flipBoard" })}
+                    className="px-4 py-2 rounded-xl shadow bg-purple-600 text-white hover:opacity-90"
+                >
+                    Flip Board
+                </button>
+
                 <div className="p-3 rounded-lg shadow bg-gray-100 h-40 overflow-y-auto">
                     <h3 className="font-bold mb-2">History</h3>
                     <ul className="space-y-1 text-sm">
                         {history.map((move, index) => (
                             <li key={index}>
-                                {index + 1}.{" "}
-                                {move.pieceFrom} {move.from} → {move.to}
+                                {index + 1}. {move.pieceFrom} {move.from} → {move.to}
                                 {move.captured ? ` (x${move.captured})` : ""}
                             </li>
                         ))}
@@ -129,56 +130,73 @@ function EmptySquare() {
                     Move Back
                 </button>
             </div>
-            {/* BOARD */}
-            <div
-                className="board-container relative grid grid-cols-8 grid-rows-8
+
+            {/* BOARD with coordinates */}
+            <div className="relative">
+                {/* Numbers (ranks) on left */}
+                <div className="absolute left-[-20px] top-0 h-full flex flex-col justify-between text-sm font-bold">
+                    {numbers.map((n) => (
+                        <div key={n} className="h-[12.5%] flex items-center">{n}</div>
+                    ))}
+                </div>
+
+                <div
+                    className="board-container relative grid grid-cols-8 grid-rows-8
         w-[320px] h-[320px]
         sm:w-[480px] sm:h-[480px]
         md:w-[640px] md:h-[640px]
         lg:w-[800px] lg:h-[800px]
         shadow-2xl rounded-md"
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleBoardMouseUp}   // 👈 drop works here
-            >
-                {Array.from({length: 8}).map((_, r) =>
-                    Array.from({length: 8}).map((_, c) => {
-                        const isDark = (r + c) % 2 === 1;
-                        const piece = board[r][c];
-                        const { r: logicR, c: logicC } = mapCoords(r, c, board.length, flipped);
-                        return (
-                            <div
-                                key={`${r}-${c}`}
-                                className={`flex items-center justify-center w-full h-full
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleBoardMouseUp}
+                >
+                    {(flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((r) =>
+                        (flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((c) => {
+                            const isDark = (r + c) % 2 === 1;
+                            const piece = board[r][c];
+                            const {r: logicR, c: logicC} = mapCoords(r, c, board.length, flipped);
+
+                            return (
+                                <div
+                                    key={`${r}-${c}`}
+                                    className={`flex items-center justify-center w-full h-full
                         ${isDark ? "bg-amber-900" : "bg-amber-100"}`}
-                            >
-                                {piece && (
-                                    <PieceImage
-                                        piece={piece}
-                                        onMouseDown={onMouseDown(piece, r, c)}
-                                        style={
-                                            drag.draggingPiece === piece &&
-                                            drag.from &&
-                                            drag.from.r === logicR &&
-                                            drag.from.c === logicC
-                                                ? { visibility: "hidden" }
-                                                : {}
-                                        }
-                                    />
-                                )}
-                            </div>
-                        );
-                    })
-                )}
-                <DragLayer/>
+                                >
+                                    {piece && (
+                                        <PieceImage
+                                            piece={piece}
+                                            onMouseDown={onMouseDown(piece, r, c)}
+                                            style={
+                                                drag.draggingPiece === piece &&
+                                                drag.from &&
+                                                drag.from.r === logicR &&
+                                                drag.from.c === logicC
+                                                    ? {visibility: "hidden"}
+                                                    : {}
+                                            }
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })
+                    )}
+                    <DragLayer/>
+                </div>
+
+                {/* Letters (files) at bottom */}
+                <div className="absolute bottom-[-20px] left-0 w-full flex justify-between text-sm font-bold">
+                    {letters.map((l) => (
+                        <div key={l} className="w-[12.5%] text-center">{l}</div>
+                    ))}
+                </div>
             </div>
 
-            {/* WHITE POOL */}
+            {/* POOLS */}
             <div
                 className="flex gap-4 p-2 rounded shadow bg-gray-50"
                 onMouseMove={handleMouseMove}
-                onMouseUp={handlePoolMouseUp}   // ✅ works for both pools
+                onMouseUp={handlePoolMouseUp}
             >
-                {/* WHITE POOL */}
                 <div className="flex flex-col gap-2 bg-gray-100 p-2 rounded">
                     {pieces.map((p) => (
                         <PieceImage
@@ -188,7 +206,6 @@ function EmptySquare() {
                         />
                     ))}
                 </div>
-                {/* BLACK POOL */}
                 <div className="flex flex-col gap-2 bg-gray-200 p-2 rounded">
                     {pieces.map((p) => (
                         <PieceImage
@@ -199,9 +216,7 @@ function EmptySquare() {
                     ))}
                 </div>
             </div>
-
         </div>
-
     );
 }
 

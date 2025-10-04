@@ -7,8 +7,8 @@ import EmptySquare from "../components/EmptySquare.jsx";
 const MainRouters = () => {
     return (
         <Suspense fallback={<div>Loading…</div>}>
-            <div className="flex justify-center items-center bg-gray-100">
-                <div className="p-4">
+            <div className="flex justify-center items-center bg-yellow-200">
+                <div className="p-1">
                     <Routes >
                         <Route path="/" element={<Chess />} />
                         <Route path="/chass" element={<Chess />} />

@@ -25,7 +25,7 @@ function Square({ r, c }) {
     );
 
     const isDark = (r + c) % 2 === 1;
-    const base = isDark ? "bg-amber-900" : "bg-amber-100";
+    const base = isDark ? "bg-amber-600" : "bg-amber-100";
     const size = board.length;
     const rankLabel = flipped ? r + 1 : size - r;
     const fileLabel = flipped ? "abcdefgh"[size - 1 - c] : "abcdefgh"[c];

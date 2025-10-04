@@ -6,6 +6,7 @@ import { moveDrag } from "../features/dragSlice.js";
 import {handleDrop} from "../utils/handleDrop.js";
 import {useLocation} from "react-router-dom";
 import {toggleBoard} from "../features/chessSlice.js";
+import {boardSize} from "../utils/className.js";
 
 const Board = () => {
     const location = useLocation();
@@ -37,16 +38,7 @@ const Board = () => {
 
     return (
         <div
-            className="
-            board-container
-            relative
-            grid grid-cols-8 grid-rows-8
-            w-[320px] h-[320px]        /* default (mobile) */
-            sm:w-[480px] sm:h-[480px]  /* small screens */
-            md:w-[640px] md:h-[640px]  /* medium (laptop) */
-            lg:w-[800px] lg:h-[800px]  /* large desktop */
-            shadow-2xl rounded-md
-          "
+            className={`board-container relative grid grid-cols-8 grid-rows-8 ${boardSize}`}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
         >

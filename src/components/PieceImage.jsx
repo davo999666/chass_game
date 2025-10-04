@@ -1,6 +1,7 @@
 // src/components/PieceImage.jsx
 import React from "react";
 import { pieceMap } from "../utils/pieceMap.js";
+import {pieceSize} from "../utils/className.js";
 
 function PieceImage({ piece, onMouseDown }) {
     if (!piece) return null;
@@ -11,13 +12,7 @@ function PieceImage({ piece, onMouseDown }) {
             alt={piece}
             onMouseDown={onMouseDown}
             draggable={false}   // ✅ stop browser default drag ghost
-            className="
-    w-[40px] h-[40px]
-    sm:w-[56px] sm:h-[56px]
-    md:w-[72px] md:h-[72px]
-    lg:w-[88px] lg:h-[88px]
-    select-none cursor-grab active:cursor-grabbing
-  "
+            className={pieceSize}
         />
     );
 }

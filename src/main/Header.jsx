@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Header() {
     return (
-        <header className="flex items-center gap-6 p-4 border-b bg-gray-200">
+        <header className="flex items-center gap-4 p-1 border-b bg-gray-200">
             <nav className="flex gap-2">
                 <NavLink
                     to="/chass"

@@ -7,6 +7,7 @@ import PieceImage from "./PieceImageEmpty.jsx";
 import { mapCoords } from "../utils/initialBoard.js";
 import { pieces } from "../utils/pieceMap.js";
 import { makeBlack, makeWhite } from "../utils/constante.js";
+import {boardSize} from "../utils/className.js";
 
 function EmptySquare() {
     const dispatch = useDispatch();
@@ -141,14 +142,19 @@ function EmptySquare() {
                 </div>
 
                 <div
-                    className="board-container relative grid grid-cols-8 grid-rows-8
-        w-[320px] h-[320px]
-        sm:w-[480px] sm:h-[480px]
-        md:w-[640px] md:h-[640px]
-        lg:w-[800px] lg:h-[800px]
-        shadow-2xl rounded-md"
+                    className={`relative grid grid-cols-8 grid-rows-8 ${boardSize}`}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleBoardMouseUp}
+                    onTouchMove={(e) => {
+                        if (e.touches.length > 0) {
+                            const touch = e.touches[0];
+                            handleMouseMove({ clientX: touch.clientX, clientY: touch.clientY });
+                        }
+                    }}
+                    onTouchEnd={(e) => {
+                        const touch = e.changedTouches[0];
+                        handleBoardMouseUp({ clientX: touch.clientX, clientY: touch.clientY });
+                    }}
                 >
                     {(flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((r) =>
                         (flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((c) => {

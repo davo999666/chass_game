@@ -1,4 +1,4 @@
-import {Route, Routes} from "react-router-dom";
+import { HashRouter as Router, Route, Routes} from "react-router-dom";
 import Chess from "./Chess.jsx";
 import {Suspense} from "react";
 import EmptySquare from "../components/EmptySquare.jsx";
@@ -6,6 +6,7 @@ import EmptySquare from "../components/EmptySquare.jsx";
 
 const MainRouters = () => {
     return (
+        <Router>
         <Suspense fallback={<div>Loading…</div>}>
             <div className="flex justify-center items-center bg-yellow-200">
                 <div className="p-1">
@@ -18,8 +19,7 @@ const MainRouters = () => {
                 </div>
             </div>
         </Suspense>
-
-
+        </Router>
     );
 };
 

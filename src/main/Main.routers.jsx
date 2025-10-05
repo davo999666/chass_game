@@ -6,9 +6,8 @@ import EmptySquare from "../components/EmptySquare.jsx";
 
 const MainRouters = () => {
     return (
-        <Router>
         <Suspense fallback={<div>Loading…</div>}>
-            <div className="flex justify-center items-center bg-yellow-200">
+            <div className="flex justify-center items-center bg-sky-50">
                 <div className="p-1">
                     <Routes >
                         <Route path="/" element={<Chess />} />
@@ -19,7 +18,6 @@ const MainRouters = () => {
                 </div>
             </div>
         </Suspense>
-        </Router>
     );
 };
 

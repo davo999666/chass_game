@@ -3,14 +3,10 @@ import PieceImage from "./PieceImageEmpty.jsx";
 import { pieces } from "../utils/pieceMap.js";
 import { makeBlack, makeWhite } from "../utils/constante.js";
 import { boardSize } from "../utils/className.js";
-import { mapCoords } from "../utils/initialBoard.js";
+import {initialEmptyBoard, mapCoords} from "../utils/initialBoard.js";
 
 function EmptySquare() {
-    const [board, setBoard] = useState(
-        Array(8)
-            .fill(null)
-            .map(() => Array(8).fill(null))
-    );
+    const [board, setBoard] = useState(initialEmptyBoard);
     const [dragging, setDragging] = useState(null); // {piece, from, x, y}
     const [flipped, setFlipped] = useState(false);
     const [history, setHistory] = useState([]);

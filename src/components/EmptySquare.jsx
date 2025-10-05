@@ -50,33 +50,45 @@ function EmptySquare() {
         if (!dragging) return;
         e.preventDefault();
 
-        const rect = boardRef.current.getBoundingClientRect();
-        const size = rect.width / 8;
+        const boardEl = boardRef.current;
+        const rect = boardEl.getBoundingClientRect();
+
+        // Use element height, not width — avoids flex offset issues
+        const boardHeight = boardEl.clientHeight;
+        const boardWidth = boardEl.clientWidth;
+
+        // Get relative pointer position
         const relX = e.clientX - rect.left;
         const relY = e.clientY - rect.top;
-        const r = Math.floor(relY / size);
-        const c = Math.floor(relX / size);
 
-        if (r < 0 || r > 7 || c < 0 || c > 7) {
-            setDragging(null);
-            return;
-        }
+        // Convert to percentage (0–1) of board
+        const percentX = relX / boardWidth;
+        const percentY = relY / boardHeight;
+
+        // Map percentage to grid (0–7)
+        let c = Math.floor(percentX * 8);
+        let r = Math.floor(percentY * 8);
+
+        // Clamp inside 0–7
+        r = Math.max(0, Math.min(7, r));
+        c = Math.max(0, Math.min(7, c));
+
+        console.log("Drop at:", { relX, relY, r, c });
 
         const { r: logicR, c: logicC } = mapCoords(r, c, board.length, flipped);
 
+        // Update board state
         setBoard((prev) => {
             const newBoard = prev.map((row) => [...row]);
-            // Remove from old place
             if (dragging.from) {
                 const { r, c } = dragging.from;
                 newBoard[r][c] = null;
             }
-            // Place to new place
             newBoard[logicR][logicC] = dragging.piece;
             return newBoard;
         });
 
-        // Add to history
+        // Update move history
         setHistory((prev) => [
             ...prev,
             {
@@ -179,7 +191,7 @@ function EmptySquare() {
                                 <div
                                     key={`${r}-${c}`}
                                     className={`flex items-center justify-center w-full h-full ${
-                                        isDark ? "bg-amber-600" : "bg-amber-100"
+                                        isDark ? "bg-[#b58863]" : "bg-[#f0d9b5]"
                                     }`}
                                 >
                                     {piece && (

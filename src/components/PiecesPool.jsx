@@ -55,11 +55,12 @@ function PiecesPoolBoard() {
     };
 
     return (
-        <div className="flex gap-6 items-center select-none" style={{ touchAction: "none" }}>
+        <div className="flex gap-6 items-center select-none " style={{ touchAction: "none" }}>
             {/* Board */}
             <Board />
 
             {/* White pool */}
+            <div className="order-3 md:order-2 flex flex-row">
             <div className="flex flex-col gap-2 bg-gray-100 p-2 rounded shadow">
                 {pieces.map((p) => (
                     <PieceImage
@@ -80,7 +81,7 @@ function PiecesPoolBoard() {
                     />
                 ))}
             </div>
-
+            </div>
             {/* ✅ Global floating drag image */}
             <DragLayer />
         </div>

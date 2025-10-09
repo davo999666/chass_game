@@ -1,8 +1,8 @@
 // src/utils/classNames.js
 export const boardSize = `
-  w-[40vw] h-[40vw]           /* default small screens: fills most width */
-  sm:w-[50vw] sm:h-[50vw]     /* small phones */
-  md:w-[50vw] md:h-[50vw]     /* tablets */
+  w-[45vw] h-[45vw]           /* default small screens: fills most width */
+  sm:w-[45vw] sm:h-[45vw]     /* small phones */
+  md:w-[45vw] md:h-[45vw]     /* tablets */
   lg:w-[50vw] lg:h-[50vw]     /* laptops */
   xl:w-[50vw] xl:h-[50vw]     /* desktops */
   2xl:w-[45vw] 2xl:h-[45vw]   /* very large screens */

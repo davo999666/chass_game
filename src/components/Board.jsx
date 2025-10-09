@@ -43,7 +43,7 @@ const Board = () => {
 
     return (
         <div style={{ touchAction: "none" }}
-            className={`board-container relative grid grid-cols-8 grid-rows-8 ${boardSize}`}
+            className={`board-container relative grid grid-cols-8 grid-rows-8 order-2 md:order-3${boardSize}`}
             onPointerUp={handlePointerUp }
             onPointerMove={handlePointerMove}
         >

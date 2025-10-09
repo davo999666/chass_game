@@ -10,7 +10,7 @@ export default function Chess() {
     const location = useLocation();
     const [gameState, setGameState] = useState(true)
     useEffect(() => {
-    (location.pathname === "/testchess" || location.pathname === "/emptychess") ? setGameState(false) : setGameState(true);
+    (location.pathname === "/testchess" ) ? setGameState(false) : setGameState(true);
     }, [location]);
 
     return (

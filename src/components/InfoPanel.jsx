@@ -11,7 +11,7 @@ function InfoPanel({location}) {
     const isChess = location.toLowerCase() === "chess";
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 order-1 md:order-1">
             <div className="p-3 rounded-lg shadow bg-white/80">
                 <button
                     className="text-xl"

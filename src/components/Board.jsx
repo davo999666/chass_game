@@ -27,20 +27,25 @@ const Board = () => {
         };
     }, []);
 
-    const handleMouseMove = (e) => {
+    const handlePointerMove = (e) => {
+        // Prevents scrolling on touch
+        e.preventDefault();
         dispatch(moveDrag({ x: e.clientX, y: e.clientY }));
     };
 
-    const handleMouseUp = (e) => {
+    const handlePointerUp = (e) => {
+        e.preventDefault();
         const boardElement = e.currentTarget.getBoundingClientRect();
-        handleDrop(e, drag, dispatch, boardElement, flipped); // 👈 pass flipped
+        handleDrop(e, drag, dispatch, boardElement, flipped);
     };
 
+
+
     return (
-        <div
+        <div style={{ touchAction: "none" }}
             className={`board-container relative grid grid-cols-8 grid-rows-8 ${boardSize}`}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
+            onPointerUp={handlePointerUp }
+            onPointerMove={handlePointerMove}
         >
             {Array.from({ length: 8 }).map((_, r) => (
                 <React.Fragment key={r}>

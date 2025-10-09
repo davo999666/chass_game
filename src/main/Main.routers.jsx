@@ -11,7 +11,7 @@ const MainRouters = () => {
                 <div className="p-1">
                     <Routes >
                         <Route path="/" element={<Chess />} />
-                        <Route path="/chass" element={<Chess />} />
+                        <Route path="/chess" element={<Chess />} />
                         <Route path="/testchess" element={<Chess />} />
                         <Route path="/emptychess" element={<EmptySquare/>} />
                     </Routes>

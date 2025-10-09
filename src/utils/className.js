@@ -1,19 +1,21 @@
 // src/utils/classNames.js
 export const boardSize = `
-  w-[280px] h-[280px]     /* very small screens */
-  sm:w-[320px] sm:h-[320px]   /* small phones */
-  md:w-[480px] md:h-[480px]   /* tablets */
-  lg:w-[580px] lg:h-[530px]   /* laptops */
-  xl:w-[800px] xl:h-[800px]   /* desktops */
-  2xl:w-[960px] 2xl:h-[960px] /* very large screens */
+  w-[40vw] h-[40vw]           /* default small screens: fills most width */
+  sm:w-[50vw] sm:h-[50vw]     /* small phones */
+  md:w-[50vw] md:h-[50vw]     /* tablets */
+  lg:w-[50vw] lg:h-[50vw]     /* laptops */
+  xl:w-[50vw] xl:h-[50vw]     /* desktops */
+  2xl:w-[45vw] 2xl:h-[45vw]   /* very large screens */
+  max-w-[960px] max-h-[960px] /* never exceed 960x960 */
   shadow-2xl rounded-md
 `;
 export const pieceSize = `
-  w-[32px] h-[32px]        /* default tiny screens */
-  sm:w-[40px] sm:h-[40px]  /* small phones */
-  md:w-[56px] md:h-[56px]  /* tablets */
-  lg:w-[65px] lg:h-[60px]  /* laptops */
-  xl:w-[88px] xl:h-[88px]  /* desktops */
-  2xl:w-[104px] 2xl:h-[104px] /* very large screens */
+  w-[5.5vw] h-[5.5vw]             /* default small screens */
+  sm:w-[5.5vw] sm:h-[5.5vw]         /* small phones */
+  md:w-[5.5vw] md:h-[5.5vw]         /* tablets */
+  lg:w-[5.5vw] lg:h-[5.5vw]         /* laptops */
+  xl:w-[5.5vw] xl:h-[5.5vw]     /* desktops */
+  2xl:w-[5.5vw] 2xl:h-[5.5vw]       /* very large screens */
+  max-w-[120px] max-h-[120px]   /* cap size on big screens */
   select-none cursor-grab active:cursor-grabbing
 `;

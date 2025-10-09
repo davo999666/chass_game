@@ -5,7 +5,7 @@ export default function Header() {
         <header className="flex items-center gap-4 p-1 border-b bg-gray-200">
             <nav className="flex gap-2">
                 <NavLink
-                    to="/chass"
+                    to="/chess"
                     className={({ isActive }) =>
                         `px-4 py-2 rounded-xl text-sm md:text-base transition hover:opacity-90 ${
                             isActive ? "bg-black text-white shadow-md" : "bg-blue-200 text-gray-800"

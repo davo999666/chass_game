@@ -55,7 +55,6 @@ const chessSlice = createSlice({
         // Also clears selections/history to make UX predictable.
         toggleBoard(state, action) {
             state.switchBoard = !!action.payload;
-
             const base = state.switchBoard ? initialBoard : initialEmptyBoard;
             state.board = deepCopyBoard(base);
             state.boardView = projectView(state.board, state.flipped);

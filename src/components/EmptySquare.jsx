@@ -49,34 +49,25 @@ function EmptySquare() {
     const handlePointerUp = (e) => {
         if (!dragging) return;
         e.preventDefault();
-
         const boardEl = boardRef.current;
         const rect = boardEl.getBoundingClientRect();
-
         // Use element height, not width — avoids flex offset issues
         const boardHeight = boardEl.clientHeight;
         const boardWidth = boardEl.clientWidth;
-
         // Get relative pointer position
         const relX = e.clientX - rect.left;
         const relY = e.clientY - rect.top;
-
         // Convert to percentage (0–1) of board
         const percentX = relX / boardWidth;
         const percentY = relY / boardHeight;
-
         // Map percentage to grid (0–7)
         let c = Math.floor(percentX * 8);
         let r = Math.floor(percentY * 8);
-
         // Clamp inside 0–7
         r = Math.max(0, Math.min(7, r));
         c = Math.max(0, Math.min(7, c));
-
         console.log("Drop at:", { relX, relY, r, c });
-
         const { r: logicR, c: logicC } = mapCoords(r, c, board.length, flipped);
-
         // Update board state
         setBoard((prev) => {
             const newBoard = prev.map((row) => [...row]);

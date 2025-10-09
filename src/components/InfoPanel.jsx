@@ -3,10 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {changeTurn, flipBoard, moveBack, toggleBoard} from "../features/chessSlice.js";
 import { WHITE } from "../utils/constante.js";
 
-function InfoPanel() {
+
+function InfoPanel({location}) {
     const dispatch = useDispatch();
     const turn = useSelector((s) => s.chess.turn);
     const history = useSelector((s) => s.chess.history);
+    const isChess = location.toLowerCase() === "chess";
 
     return (
         <div className="flex flex-col gap-2">
@@ -21,7 +23,7 @@ function InfoPanel() {
                 </button>
             </div>
             <button
-                onClick={() => dispatch(toggleBoard(false))}
+                onClick={() => dispatch(toggleBoard(isChess))}
                 className="px-4 py-2 rounded-xl shadow bg-indigo-600 text-white hover:opacity-90"
             >
                 Reset

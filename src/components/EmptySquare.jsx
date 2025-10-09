@@ -108,8 +108,35 @@ function EmptySquare() {
     };
 
     const handleMoveBack = () => {
-        setHistory((prev) => prev.slice(0, -1));
+        setHistory((prevHistory) => {
+            if (prevHistory.length === 0) return prevHistory;
+
+            // Get last move
+            const lastMove = prevHistory[prevHistory.length - 1];
+            const { pieceFrom, from, to } = lastMove;
+
+            // Parse coordinates (like "3,4" → numbers)
+            const [toR, toC] = to.split(",").map(Number);
+            const [fromR, fromC] =
+                from === "pool" ? [null, null] : from.split(",").map(Number);
+
+            // Update board
+            setBoard((prevBoard) => {
+                const newBoard = prevBoard.map((row) => [...row]);
+                // Remove piece from target
+                newBoard[toR][toC] = null;
+                // If not from pool, restore the piece
+                if (fromR !== null && fromC !== null) {
+                    newBoard[fromR][fromC] = pieceFrom;
+                }
+                return newBoard;
+            });
+
+            // Remove last move from history
+            return prevHistory.slice(0, -1);
+        });
     };
+
 
     const handleFlip = () => {
         setFlipped((prev) => !prev);

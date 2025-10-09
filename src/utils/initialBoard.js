@@ -20,6 +20,7 @@ export const initialEmptyBoard = [
 ];
 
 export const deepCopyBoard = (board) => board.map(row => [...row]);
+
 export const flipBoardView = (board) => {
     return board
         .map(row => [...row])   // copy each row

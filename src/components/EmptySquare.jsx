@@ -142,12 +142,8 @@ function EmptySquare() {
         setFlipped((prev) => !prev);
     };
 
-    const letters = flipped
-        ? ["h", "g", "f", "e", "d", "c", "b", "a"]
-        : ["a", "b", "c", "d", "e", "f", "g", "h"];
-    const numbers = flipped
-        ? ["1", "2", "3", "4", "5", "6", "7", "8"]
-        : ["8", "7", "6", "5", "4", "3", "2", "1"];
+    const letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const numbers = ["8", "7", "6", "5", "4", "3", "2", "1"];
 
     // -------------------------
     // RENDER
@@ -196,50 +192,71 @@ function EmptySquare() {
 
             {/* BOARD */}
             <div className="relative">
-                {/* Numbers (ranks) */}
-                <div className="absolute left-[-20px] top-0 h-full flex flex-col justify-between text-sm font-bold">
-                    {numbers.map((n) => (
-                        <div key={n} className="h-[12.5%] flex items-center">
-                            {n}
-                        </div>
-                    ))}
-                </div>
-
                 <div
                     ref={boardRef}
                     className={`relative grid grid-cols-8 grid-rows-8 ${boardSize}`}
                     style={{ touchAction: "none" }}
                 >
                     {(flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((r) =>
-                        (flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((c) => {
-                            const isDark = (r + c) % 2 === 1;
-                            const piece = board[r][c];
-                            return (
-                                <div
-                                    key={`${r}-${c}`}
-                                    className={`flex items-center justify-center w-full h-full ${
-                                        isDark ? "bg-[#b58863]" : "bg-[#f0d9b5]"
-                                    }`}
-                                >
-                                    {piece && (
-                                        <PieceImage
-                                            piece={piece}
-                                            onPointerDown={handlePointerDownBoard(piece, r, c)}
-                                            style={{
-                                                touchAction: "none",
-                                                visibility:
-                                                    dragging &&
-                                                    dragging.piece === piece &&
-                                                    dragging.from?.r === r &&
-                                                    dragging.from?.c === c
-                                                        ? "hidden"
-                                                        : "visible",
-                                            }}
-                                        />
-                                    )}
-                                </div>
-                            );
-                        })
+                            (flipped ? [...Array(8).keys()].reverse() : [...Array(8).keys()]).map((c) => {
+                                const isDark = (r + c) % 2 === 1;
+                                const piece = board[r][c];
+                                const letter = letters[c];
+                                const number = numbers[r];
+                                const placeLetter = flipped ? "left-[3%] top-[3%]":"right-[3%] bottom-[3%]";
+                                const placeNumber = flipped ? "right-[3%] bottom-[3%]":"left-[3%] top-[3%]";
+
+                                return (
+                                    <div
+                                        key={`${r}-${c}`}
+                                        className={`relative flex items-center justify-center w-full h-full ${
+                                            isDark ? "bg-[#b58863]" : "bg-[#f0d9b5]"
+                                        }`}
+                                    >
+                                        {/* ♟️ piece */}
+                                        {piece && (
+                                            <PieceImage
+                                                piece={piece}
+                                                onPointerDown={handlePointerDownBoard(piece, r, c)}
+                                                style={{
+                                                    touchAction: "none",
+                                                    visibility:
+                                                        dragging &&
+                                                        dragging.piece === piece &&
+                                                        dragging.from?.r === r &&
+                                                        dragging.from?.c === c
+                                                            ? "hidden"
+                                                            : "visible",
+                                                }}
+                                            />
+                                        )}
+
+                                        {/* 🔠 file letter — bottom-right corner */}
+                                        {r === 7 && (
+                                            <span
+                                                className={`absolute ${placeLetter} select-none pointer-events-none text-[black]`}
+                                                style={{
+                                                    fontSize: "calc(1.2vw + 0.2rem)", // scales with viewport width and base font size
+                                                }}
+                                            >
+                                        {letter}
+                                        </span>
+                                        )}
+
+                                        {/* 🔢 rank number — top-left corner */}
+                                        {c === 0 && (
+                                            <span
+                                                className={`absolute ${placeNumber} select-none pointer-events-none text-[black]`}
+                                                style={{
+                                                    fontSize: "calc(1.2vw + 0.2rem)",
+                                                }}
+                                            >
+                                        {number}
+                                        </span>
+                                        )}
+                                    </div>
+                                );
+                            })
                     )}
 
                     {/* Drag Layer */}
@@ -257,16 +274,8 @@ function EmptySquare() {
                         </div>
                     )}
                 </div>
-
-                {/* Letters (files) */}
-                <div className="absolute bottom-[-20px] left-0 w-full flex justify-between text-sm font-bold">
-                    {letters.map((l) => (
-                        <div key={l} className="w-[12.5%] text-center">
-                            {l}
-                        </div>
-                    ))}
-                </div>
             </div>
+
 
             {/* POOLS */}
             <div

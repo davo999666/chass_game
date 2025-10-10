@@ -9,7 +9,7 @@ export function isSquareAttacked(board, targetR, targetC, byColor) {
             if (!p) continue;
             if (byColor === WHITE && !isWhite(p)) continue;
             if (byColor === BLACK && !isBlack(p)) continue;
-            const moves = pseudoMovesForPiece(board, r, c, p, byColor);
+            const moves = pseudoMovesForPiece(board, r, c, p);
             if (moves.some(([mr, mc]) => mr === targetR && mc === targetC)) {
                 return true;
             }

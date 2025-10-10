@@ -13,7 +13,7 @@ export function handleSelection(state, r, c, piece) {
         }
 
         state.selected = { r, c };
-        state.legal = legalMoves(state.board, r, c, state.turn, state.castling);
+        state.legal = legalMoves(state.board, r, c, state.turn, state.castling,state.history[state.history.length - 1] || null);
         return true;
     } else {
         // If clicked same color piece, reselect
@@ -23,7 +23,7 @@ export function handleSelection(state, r, c, piece) {
                 (state.turn === BLACK && isBlack(piece)))
         ) {
             state.selected = { r, c };
-            state.legal = legalMoves(state.board, r, c, state.turn, state.castling);
+            state.legal = legalMoves(state.board, r, c, state.turn, state.castling, state.history[state.history.length - 1] || null);
             return true;
         }
     }

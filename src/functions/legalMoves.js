@@ -1,45 +1,50 @@
-import {findKing} from "./findKing.js";
+import { findKing } from "./findKing.js";
 // constants
 const WHITE = "w";
 const BLACK = "b";
 import { pseudoMovesForPiece } from "./pseudoMovesForPiece.js";
 import { isSquareAttacked } from "./isSquareAttacked.js";
-import {cloneBoard, isBlack, isWhite} from "../utils/constante.js";
+import { cloneBoard, isBlack, isWhite } from "../utils/constante.js";
 
-
-
-export function legalMoves(board, fromR, fromC, turn, castling) {
+export function legalMoves(board, fromR, fromC, turn, castling, lastMove) { // ✅ add lastMove param
     const piece = board[fromR][fromC];
     if (!piece) return [];
     if (turn === WHITE && !isWhite(piece)) return [];
     if (turn === BLACK && !isBlack(piece)) return [];
 
-    const raw = pseudoMovesForPiece(board, fromR, fromC, piece, turn);
+    // ✅ pass lastMove into pseudoMovesForPiece
+    const raw = pseudoMovesForPiece(board, fromR, fromC, piece, lastMove);
     const color = isWhite(piece) ? WHITE : BLACK;
 
     const res = [];
-    // Filter self-check
-    for (const [toR, toC] of raw) {
+    // ✅ keep the 3rd item ("special") in destructuring
+    for (const [toR, toC, special] of raw) {
         const b2 = cloneBoard(board);
         b2[toR][toC] = piece;
         b2[fromR][fromC] = null;
+
+        // ✅ If this move is en passant, remove captured pawn
+        if (special?.enPassant && special?.remove) {
+            const [remR, remC] = special.remove;
+            b2[remR][remC] = null;
+        }
+
         const kingPos = findKing(b2, color);
         if (!kingPos) continue;
         const [kR, kC] = kingPos;
+
         if (!isSquareAttacked(b2, kR, kC, color === WHITE ? BLACK : WHITE)) {
-            res.push([toR, toC]);
+            res.push([toR, toC, special || null]); // ✅ keep special
         }
     }
 
-    // Castling for kings
+    // ♔ Castling logic (same as before)
     if (piece.toUpperCase() === "K") {
         const colorIsWhite = isWhite(piece);
         const homeRow = colorIsWhite ? 7 : 0;
         const enemy = colorIsWhite ? BLACK : WHITE;
 
-        // king must be on home square and not in check
         if (fromR === homeRow && fromC === 4 && !isSquareAttacked(board, fromR, fromC, enemy)) {
-            // King side (O-O): squares 5 and 6 empty, rook at 7, rights available, squares not attacked
             const key = colorIsWhite ? "K" : "k";
             if (castling[key]) {
                 const empty = !board[homeRow][5] && !board[homeRow][6];
@@ -50,7 +55,7 @@ export function legalMoves(board, fromR, fromC, turn, castling) {
                     res.push([homeRow, 6, { castle: "king" }]);
                 }
             }
-            // Queen side (O-O-O): squares 3,2,1 empty, rook at 0, rights available, squares not attacked
+
             const keyQ = colorIsWhite ? "Q" : "q";
             if (castling[keyQ]) {
                 const empty = !board[homeRow][3] && !board[homeRow][2] && !board[homeRow][1];

@@ -273,8 +273,6 @@ function EmptySquare() {
                                 const piece = board[r][c];
                                 const letter = letters[c];
                                 const number = numbers[r];
-                                // const placeLetter = flipped ? "left-[3%] top-[3%]":"right-[3%] bottom-[3%]";
-                                // const placeNumber = flipped ? "right-[3%] bottom-[3%]":"left-[3%] top-[3%]";
 
                                 return (
                                     <div
@@ -309,8 +307,8 @@ function EmptySquare() {
                                                     fontSize: "calc(1.2vw + 0.2rem)", // scales with viewport width and base font size
                                                 }}
                                             >
-    {letter}
-  </span>
+                                      {letter}
+                                       </span>
                                         )}
 
                                         {/* 🔢 rank number — top-left (normal) or bottom-left (flipped) */}
@@ -321,8 +319,8 @@ function EmptySquare() {
                                                     fontSize: "calc(1.2vw + 0.2rem)",
                                                 }}
                                             >
-    {number}
-  </span>
+                                      {number}
+                                       </span>
                                         )}
                                     </div>
                                 );

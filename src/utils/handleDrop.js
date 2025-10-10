@@ -3,14 +3,9 @@ import { endDrag } from "../features/dragSlice.js";
 import {placePiece, selectSquare} from "../features/chessSlice.js";
 import { mapCoords } from "./initialBoard.js";
 
-/**
- * Handle dropping a piece on the board
- */
 export const handleDrop = (e, drag, dispatch, boardElement, flipped) => {
     if (!boardElement) return;
-
     const { left, top, right, bottom, width } = boardElement;
-
     // If dropped outside the board → cancel
     if (
         e.clientX < left ||
@@ -21,7 +16,6 @@ export const handleDrop = (e, drag, dispatch, boardElement, flipped) => {
         dispatch(endDrag());
         return;
     }
-
     // Convert screen position → board row/col (UI coords)
     const squareSize = width / 8;
     const uiC = Math.floor((e.clientX - left) / squareSize);

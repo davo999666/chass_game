@@ -10,7 +10,7 @@ import {WHITE, BLACK, initialCastling} from "../utils/constante.js";
 import { formatMove, toAlgebraic } from "../functions/helpers.js";
 import { applyMove } from "../functions/applyMove.js";
 import {handleSelection} from "../functions/handleIlegalSelection.js";
-import { getPieceInfo } from "../utils/getPieceInfo.js";
+import {setLastMove} from "../functions/pseudoMovesForPiece.js";
 
 // Small helper to keep boardView in sync with flip state
 const projectView = (board, flipped) =>
@@ -59,7 +59,6 @@ const chessSlice = createSlice({
             state.boardView = projectView(state.board, state.flipped);
         },
         moveBack(state) {
-
             if (state.history.length === 0) return;
 
             const lastMove = state.history.pop();
@@ -69,11 +68,24 @@ const chessSlice = createSlice({
             const toCol   = lastMove.to.charCodeAt(0) - 97;
             const toRow   = 8 - parseInt(lastMove.to[1], 10);
 
-            // restore king (or moved piece)
+            // 🧩 restore moved piece
             state.board[fromRow][fromCol] = lastMove.pieceFrom;
-            state.board[toRow][toCol] = lastMove.captured || null;
 
-            // restore rook if castling
+            // 🧠 handle special en passant reversal
+            if (lastMove.special?.enPassant && lastMove.special?.remove) {
+                const [remR, remC] = lastMove.special.remove;
+                // bring back the captured pawn
+                if (lastMove.captured) {
+                    state.board[remR][remC] = lastMove.captured;
+                }
+                // clear the landing square (since it was empty in en passant)
+                state.board[toRow][toCol] = null;
+            } else {
+                // normal move → restore captured piece (if any)
+                state.board[toRow][toCol] = lastMove.captured || null;
+            }
+
+            // ♜ restore rook if castling
             if (lastMove.didCastle) {
                 const rookFromCol = lastMove.rookFrom.charCodeAt(0) - 97;
                 const rookFromRow = 8 - parseInt(lastMove.rookFrom[1], 10);
@@ -84,22 +96,23 @@ const chessSlice = createSlice({
                 state.board[rookToRow][rookToCol] = null;
             }
 
+            // ♟️ flip turn and clear selection
             state.turn = state.turn === WHITE ? BLACK : WHITE;
             state.selected = null;
             state.legal = [];
 
-            // refresh view
+            // 🔄 refresh board view
             state.boardView = projectView(state.board, state.flipped);
         },
+
 
         // Selection + move application (your logic preserved, view refresh unified)
         selectSquare(state, action) {
             const { r, c } = action.payload;
             const piece = state.board[r][c];
 
-            // your external handler may set selection/legals and return true
+            // 🔹 Let handleSelection manage highlights or invalid clicks
             if (handleSelection(state, r, c, piece)) {
-
                 return;
             }
             if (!state.selected) {
@@ -108,22 +121,32 @@ const chessSlice = createSlice({
 
             const { r: fr, c: fc } = state.selected;
 
-            // legal move check
-            const isLegal = state.legal.some(([lr, lc]) => lr === r && lc === c);
-            const special = state.legal.find(([lr, lc, sp]) => lr === r && lc === c && sp);
-            if (!isLegal) {
+            // 🧩 Find move entry (with or without special data)
+            const entry = state.legal.find(([lr, lc]) => lr === r && lc === c);
+            if (!entry) {
                 state.selected = null;
                 state.legal = [];
                 return;
             }
+            // ✅ Extract special (e.g. enPassant)
+            const special = entry.length > 2 ? entry[2] : null;
 
-            const capturedPiece = state.board[r][c]; // capture before apply
-            const { newBoard, didCastle, pieceFrom } = applyMove(state, fr, fc, r, c);
+            // 🔹 Normally capture target square
+            let capturedPiece = state.board[r][c];
 
-            // update board
+            // ✅ En passant capture — we must check the remove square, not target square
+            if (special?.enPassant && special?.remove) {
+                const [remR, remC] = special.remove;
+                capturedPiece = state.board[remR][remC];
+            }
+
+            // ✅ Apply move (includes en passant removal)
+            const { newBoard, didCastle, pieceFrom } = applyMove(state, fr, fc, r, c, special);
+
+            // ✅ Update board after move
             state.board = newBoard;
 
-            // record notation/history
+            // ✅ Record notation/history
             const moveNotation = formatMove(
                 pieceFrom,
                 toAlgebraic(fr, fc),
@@ -133,25 +156,36 @@ const chessSlice = createSlice({
 
             state.history.push({
                 pieceFrom,                // e.g., "K"
-                captured: capturedPiece,  // null if none
+                captured: capturedPiece,  // ✅ en passant captures will now show correctly
                 from: toAlgebraic(fr, fc),
                 to: toAlgebraic(r, c),
                 notation: moveNotation,
                 display: didCastle ? moveNotation : pieceFrom.toUpperCase() !== "P" ? pieceFrom.toUpperCase() : "",
-
-                // extra rook data for undo castling
+                fromPos: [fr, fc],
+                toPos: [r, c],
+                special,
                 didCastle,
                 rookFrom: didCastle ? (c === 6 ? "h" + (8 - fr) : "a" + (8 - fr)) : null,
-                rookTo:   didCastle ? (c === 6 ? "f" + (8 - fr) : "d" + (8 - fr)) : null,
-                rookPiece: didCastle ? (pieceFrom === "K" ? "R" : "r") : null,
+                rookTo: didCastle ? (c === 6 ? "f" + (8 - fr) : "d" + (8 - fr)) : null,
+                rookPiece: didCastle ? pieceFrom === "K" ? "R" : "r" : null,
             });
 
-            // refresh view
+            // ✅ Save last move to cache for next en passant
+            setLastMove({
+                piece: pieceFrom,
+                fromPos: [fr, fc],
+                toPos: [r, c],
+                captured: capturedPiece,
+            });
+
+            // ✅ Refresh board view and reset selection
             state.boardView = projectView(state.board, state.flipped);
             state.turn = state.turn === WHITE ? BLACK : WHITE;
             state.selected = null;
             state.legal = [];
         },
+
+
     },
 });
 

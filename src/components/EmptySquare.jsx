@@ -49,48 +49,99 @@ function EmptySquare() {
     const handlePointerUp = (e) => {
         if (!dragging) return;
         e.preventDefault();
+
         const boardEl = boardRef.current;
         const rect = boardEl.getBoundingClientRect();
-        // Use element height, not width — avoids flex offset issues
         const boardHeight = boardEl.clientHeight;
         const boardWidth = boardEl.clientWidth;
-        // Get relative pointer position
+
+        // Pointer position
         const relX = e.clientX - rect.left;
         const relY = e.clientY - rect.top;
-        // Convert to percentage (0–1) of board
+
+        // 🧱 Check if dropped outside board
+        const outside =
+            e.clientX < rect.left ||
+            e.clientX > rect.right ||
+            e.clientY < rect.top ||
+            e.clientY > rect.bottom;
+
+        if (outside) {
+            // 🗑️ If dropped outside → remove piece completely
+            setBoard((prev) => {
+                const newBoard = prev.map((row) => [...row]);
+                if (dragging.from) {
+                    const { r, c } = dragging.from;
+                    newBoard[r][c] = null;
+                }
+                return newBoard;
+            });
+
+            // Save that in history (optional)
+            setHistory((prev) => [
+                ...prev,
+                {
+                    pieceFrom: dragging.piece,
+                    from: dragging.from ? `${dragging.from.r},${dragging.from.c}` : "pool",
+                    to: "outside",
+                    removed: true,
+                },
+            ]);
+
+            setDragging(null);
+            return; // stop here
+        }
+
+        // 🧮 Continue normal logic (inside board)
         const percentX = relX / boardWidth;
         const percentY = relY / boardHeight;
-        // Map percentage to grid (0–7)
+
         let c = Math.floor(percentX * 8);
         let r = Math.floor(percentY * 8);
-        // Clamp inside 0–7
         r = Math.max(0, Math.min(7, r));
         c = Math.max(0, Math.min(7, c));
-        console.log("Drop at:", { relX, relY, r, c });
+
         const { r: logicR, c: logicC } = mapCoords(r, c, board.length, flipped);
-        // Update board state
+
+        // Get target square before moving (capture detection)
+        const targetPiece = board[logicR][logicC];
+
+        // Detect promotion
+        const isWhitePromotion = dragging.piece === "P" && logicR === 0;
+        const isBlackPromotion = dragging.piece === "p" && logicR === 7;
+        let newPiece = dragging.piece;
+
+        if (isWhitePromotion || isBlackPromotion) {
+            newPiece = dragging.piece === "P" ? "Q" : "q";
+        }
+
+        // 🧩 Update board
         setBoard((prev) => {
             const newBoard = prev.map((row) => [...row]);
             if (dragging.from) {
                 const { r, c } = dragging.from;
                 newBoard[r][c] = null;
             }
-            newBoard[logicR][logicC] = dragging.piece;
+            newBoard[logicR][logicC] = newPiece;
             return newBoard;
         });
 
-        // Update move history
+        // 🧩 Save move info
         setHistory((prev) => [
             ...prev,
             {
                 pieceFrom: dragging.piece,
+                promotedTo: newPiece !== dragging.piece ? newPiece : null,
                 from: dragging.from ? `${dragging.from.r},${dragging.from.c}` : "pool",
                 to: `${logicR},${logicC}`,
+                captured: targetPiece || null,
             },
         ]);
 
         setDragging(null);
     };
+
+
 
     // Reset / MoveBack / Flip Board
     const handleReset = () => {
@@ -102,31 +153,59 @@ function EmptySquare() {
         setHistory((prevHistory) => {
             if (prevHistory.length === 0) return prevHistory;
 
-            // Get last move
             const lastMove = prevHistory[prevHistory.length - 1];
-            const { pieceFrom, from, to } = lastMove;
+            const { pieceFrom, promotedTo, captured, from, to, removed } = lastMove;
 
-            // Parse coordinates (like "3,4" → numbers)
+            // Special case: piece was dropped outside → restore it
+            if (removed) {
+                setBoard((prevBoard) => {
+                    const newBoard = prevBoard.map((row) => [...row]);
+                    // Restore piece back to its original square
+                    if (from && from !== "pool") {
+                        const [r, c] = from.split(",").map(Number);
+                        newBoard[r][c] = pieceFrom;
+                    }
+                    return newBoard;
+                });
+
+                return prevHistory.slice(0, -1);
+            }
+
+            // Normal undo logic
             const [toR, toC] = to.split(",").map(Number);
             const [fromR, fromC] =
                 from === "pool" ? [null, null] : from.split(",").map(Number);
 
-            // Update board
             setBoard((prevBoard) => {
                 const newBoard = prevBoard.map((row) => [...row]);
-                // Remove piece from target
+
+                // Clear destination square
                 newBoard[toR][toC] = null;
-                // If not from pool, restore the piece
-                if (fromR !== null && fromC !== null) {
+
+                // 🧠 Restore captured piece if it existed
+                if (captured) {
+                    newBoard[toR][toC] = captured;
+                }
+
+                // 🧠 Restore pawn if it was a promotion
+                if (promotedTo) {
+                    if (fromR !== null && fromC !== null) {
+                        newBoard[fromR][fromC] = pieceFrom; // e.g. "P" or "p"
+                    }
+                } else if (fromR !== null && fromC !== null) {
+                    // Regular move
                     newBoard[fromR][fromC] = pieceFrom;
                 }
+
                 return newBoard;
             });
 
-            // Remove last move from history
+            // Remove move from history
             return prevHistory.slice(0, -1);
         });
     };
+
+
 
 
     const handleFlip = () => {

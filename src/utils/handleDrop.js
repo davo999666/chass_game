@@ -45,3 +45,35 @@ export const handleDrop = (e, drag, dispatch, boardElement, flipped) => {
     // Always clear drag state
     dispatch(endDrag());
 };
+
+export function isPawnPromotion(piece, rowOrEvent, boardElement, flipped = false) {
+    if (!piece || (piece !== "P" && piece !== "p")) return false;
+
+    let row = typeof rowOrEvent === "number" ? rowOrEvent : null;
+
+    // 🧮 If a MouseEvent is passed, calculate the row
+    if (row === null && rowOrEvent && boardElement) {
+        const e = rowOrEvent;
+        const { left, top, width, right, bottom } = boardElement;
+        if (
+            e.clientX < left ||
+            e.clientX > right ||
+            e.clientY < top ||
+            e.clientY > bottom
+        ) {
+            return false; // outside board
+        }
+
+        const squareSize = width / 8;
+        const uiC = Math.floor((e.clientX - left) / squareSize);
+        const uiR = Math.floor((e.clientY - top) / squareSize);
+
+        const { r } = mapCoords(uiR, uiC, 8, flipped);
+        row = r;
+    }
+
+    // 🧠 Check promotion condition
+    if (piece === "P" && row === 0) return true; // White at top
+    if (piece === "p" && row === 7) return true; // Black at bottom
+    return false;
+}

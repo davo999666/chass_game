@@ -30,9 +30,7 @@ function PiecesPoolBoard() {
         };
         const handleUp = (e) => {
             e.preventDefault();
-            const boardElement = document
-                .querySelector(".board-container")
-                ?.getBoundingClientRect();
+            const boardElement = document.querySelector(".board-container")?.getBoundingClientRect();
             handleDrop(e, drag, dispatch, boardElement, flipped);
             dispatch(endDrag());
             window.removeEventListener("pointermove", handleMove);

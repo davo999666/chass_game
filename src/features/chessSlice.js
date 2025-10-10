@@ -137,7 +137,7 @@ const chessSlice = createSlice({
                 from: toAlgebraic(fr, fc),
                 to: toAlgebraic(r, c),
                 notation: moveNotation,
-                display: didCastle ? moveNotation : getPieceInfo(pieceFrom),
+                display: didCastle ? moveNotation : pieceFrom.toUpperCase() !== "P" ? pieceFrom.toUpperCase() : "",
 
                 // extra rook data for undo castling
                 didCastle,

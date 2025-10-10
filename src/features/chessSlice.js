@@ -9,7 +9,7 @@ import {
 import {WHITE, BLACK, initialCastling} from "../utils/constante.js";
 import { formatMove, toAlgebraic } from "../functions/helpers.js";
 import { applyMove } from "../functions/applyMove.js";
-import {handleSelection, handleSelection1} from "../functions/handleIlegalSelection.js";
+import {handleSelection} from "../functions/handleIlegalSelection.js";
 import { getPieceInfo } from "../utils/getPieceInfo.js";
 
 // Small helper to keep boardView in sync with flip state
@@ -31,28 +31,10 @@ const chessSlice = createSlice({
         flipped: false,
     },
     reducers: {
-        // ============ CORE RESETS / TOGGLES ============
-        resetGame(state) {
-            state.turn = WHITE;
-            state.selected = null;
-            state.legal = [];
-            state.castling = { ...initialCastling };
-            state.history = [];
-            state.flipped = false; // reset orientation
-
-            // choose which base to reset to (normal or empty) based on switchBoard
-            const base = state.switchBoard ? initialBoard : initialEmptyBoard;
-            state.board = deepCopyBoard(base);
-            state.boardView = projectView(state.board, state.flipped);
-        },
-
         flipBoard(state) {
             state.flipped = !state.flipped;
             state.boardView = projectView(state.board, state.flipped);
         },
-
-        // When true → normal initial board; false → empty board.
-        // Also clears selections/history to make UX predictable.
         toggleBoard(state, action) {
             state.switchBoard = !!action.payload;
             const base = state.switchBoard ? initialBoard : initialEmptyBoard;
@@ -76,36 +58,6 @@ const chessSlice = createSlice({
             state.board[r][c] = piece;
             state.boardView = projectView(state.board, state.flipped);
         },
-        placePieceBord(state, action) {
-            const { r, c } = action.payload;
-            const piece = state.board[r][c];
-            if (handleSelection1(state, r, c, piece)) {
-                return;
-            }
-
-            if (!state.selected) {
-                return;
-            }
-            if (!state.selected && state.board[r][c]) {
-                state.selected = { r, c }; console.log("✅ Selected", state.board[r][c], "at", { r, c });
-                return;
-            }
-            const { r: fr, c: fc } = state.selected || {};
-            if (!state.selected && state.board[r][c]) {
-                state.selected = { r, c };
-                return;
-            }
-            state.board[r][c] = state.board[fr][fc]; state.board[fr][fc] = null; state.selected = null;
-            state.boardView = projectView(state.board, state.flipped);
-        },
-        clearSquare(state, action) {
-            const { r, c } = action.payload; // LOGIC coordinates
-            state.board[r][c] = null;
-            state.boardView = projectView(state.board, state.flipped);
-        },
-
-        // ============ GAMEPLAY ============
-        // Undo last move (basic version + castling support like your code)
         moveBack(state) {
 
             if (state.history.length === 0) return;
@@ -204,14 +156,11 @@ const chessSlice = createSlice({
 });
 
 export const {
-    placePieceBord,
     flipBoard,
     changeTurn,
     moveBack,
-    resetGame,
     toggleBoard,
     placePiece,
-    clearSquare,
     selectSquare,
 } = chessSlice.actions;
 

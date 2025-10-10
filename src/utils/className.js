@@ -3,8 +3,8 @@ export const boardSize = `
   w-[45vw] h-[45vw]           /* default small screens: fills most width */
   sm:w-[45vw] sm:h-[45vw]     /* small phones */
   md:w-[45vw] md:h-[45vw]     /* tablets */
-  lg:w-[50vw] lg:h-[50vw]     /* laptops */
-  xl:w-[50vw] xl:h-[50vw]     /* desktops */
+  lg:w-[45vw] lg:h-[45vw]     /* laptops */
+  xl:w-[45vw] xl:h-[45vw]     /* desktops */
   2xl:w-[45vw] 2xl:h-[45vw]   /* very large screens */
   max-w-[960px] max-h-[960px] /* never exceed 960x960 */
   shadow-2xl rounded-md

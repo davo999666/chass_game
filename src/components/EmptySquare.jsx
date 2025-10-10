@@ -273,8 +273,8 @@ function EmptySquare() {
                                 const piece = board[r][c];
                                 const letter = letters[c];
                                 const number = numbers[r];
-                                const placeLetter = flipped ? "left-[3%] top-[3%]":"right-[3%] bottom-[3%]";
-                                const placeNumber = flipped ? "right-[3%] bottom-[3%]":"left-[3%] top-[3%]";
+                                // const placeLetter = flipped ? "left-[3%] top-[3%]":"right-[3%] bottom-[3%]";
+                                // const placeNumber = flipped ? "right-[3%] bottom-[3%]":"left-[3%] top-[3%]";
 
                                 return (
                                     <div
@@ -301,28 +301,28 @@ function EmptySquare() {
                                             />
                                         )}
 
-                                        {/* 🔠 file letter — bottom-right corner */}
-                                        {r === 7 && (
+                                        {/* 🔠 file letter — bottom-right (normal) or top-right (flipped) */}
+                                        {(flipped ? r === 0 : r === 7) && (
                                             <span
-                                                className={`absolute ${placeLetter} select-none pointer-events-none text-[black]`}
+                                                className={`absolute right-[3%] bottom-[3%] select-none pointer-events-none text-[black]`}
                                                 style={{
                                                     fontSize: "calc(1.2vw + 0.2rem)", // scales with viewport width and base font size
                                                 }}
                                             >
-                                        {letter}
-                                        </span>
+    {letter}
+  </span>
                                         )}
 
-                                        {/* 🔢 rank number — top-left corner */}
-                                        {c === 0 && (
+                                        {/* 🔢 rank number — top-left (normal) or bottom-left (flipped) */}
+                                        {(flipped ? c === 7 : c === 0) && (
                                             <span
-                                                className={`absolute ${placeNumber} select-none pointer-events-none text-[black]`}
+                                                className={`absolute left-[3%] top-[3%] select-none pointer-events-none text-[black]`}
                                                 style={{
                                                     fontSize: "calc(1.2vw + 0.2rem)",
                                                 }}
                                             >
-                                        {number}
-                                        </span>
+    {number}
+  </span>
                                         )}
                                     </div>
                                 );
